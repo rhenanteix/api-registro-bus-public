@@ -1,2 +1,1 @@
-# vai-api
-API Vaib
+API
