@@ -1,0 +1,22 @@
+{
+  "name": "api-registro-bus-public",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "https://github.com/rhenanteix/api-registro-bus-public.git",
+  "author": "Rhenan Silverio Teixeira <rhenancontato@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.26.0",
+    "body-parser": "^1.19.2",
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "mongodb": "^4.4.0",
+    "mongoose": "^6.2.2",
+    "node-fetch": "^3.2.0",
+    "request": "^2.88.2"
+  }
+}
