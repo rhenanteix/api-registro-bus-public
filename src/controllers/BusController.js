@@ -1,6 +1,6 @@
 const MongoClient = require("mongodb").MongoClient;
 const url =
-  "mongodb+srv://busapi:busapi@cluster0.qfftm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+  "CLUSTER";
 const ObjectID = require("mongodb").ObjectID;
 
 async function getDatabase() {
