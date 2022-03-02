@@ -1,6 +1,6 @@
 const MongoClient = require("mongodb").MongoClient;
 const url =
-  "CLUSTER";
+  "mongodb+srv://busapi:busapi@cluster0.qfftm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const ObjectID = require("mongodb").ObjectID;
 
 async function getDatabase() {
@@ -44,58 +44,105 @@ async function register(req, res) {
   }
 }
 
-async function update(req, res) {
-  const { _id, auth_id } = req.body;
-  try {
-    if (!_id) {
-      return res
-        .status(500)
-        .json({ error: "Voucher ID não informado do corpo da requisição" });
+async function registerEmpresasRegistroSP(req, res) {
+    try {
+      const { nome, cnpjCpf, tipo, contato, produtos, atendimento, funcionario, tipoPagamento  } = req.body;
+  
+      if (!req.body) {
+        return res
+          .status(500)
+          .json({ error: "Algum campo  não foi informado do corpo da requisição" });
+      }
+  
+      const database = await getDatabase();
+  
+      const busCollection = await database.collection("companyRegistro");
+  
+      const bidExits = await busCollection.findOne({ cnpjCpf });
+  
+      if (bidExits)
+        return res
+          .status(500)
+          .json({ error: "Um cpf ou cpnj já existe" });
+  
+          busCollection.insertOne({
+        ...req.body,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+      res.status(200).json({ message: "Empresa da cidade de Registro foi criado com sucesso" });
+    } catch (error) {
+      res.status(500).json({ error: "Não foi possivel criar essa empresa, verifique com nosso suporte" });
     }
-
-    if (!auth_id) {
-      return res
-        .status(500)
-        .json({ error: "Usuário ID não informado do corpo da requisição" });
-    }
-
-    const database = await getDatabase();
-
-    const voucherCollection = await database.collection("vouchers");
-
-    const voucherExits = await voucherCollection.findOne({ auth_id });
-
-    if (voucherExits)
-      return res
-        .status(500)
-        .json({ error: "Esse usuário já está autenticado" });
-
-    voucherCollection.updateOne({
-      ...req.body,
-
-      $set: {
-        auth_id,
-        updateAt: new Date(),
-      },
-
-      //   {
-      //     $set: {
-      //       auth_id,
-      //       updatedAt: new Date(),
-      //     },
-      //   }
-    });
-    res.status(200).json({ message: "Associação com usuário efetivada" });
-  } catch (error) {
-    res.status(500).json({ error: "Não foi possivel gerar uma associação" });
   }
-}
+
+  // cadastrar
+
+  async function registerVagas(req, res) {
+    try {
+      const { nomeEmpresa, email, celular, nomeVaga, descricaoVaga, descricaoEmpresa, link  } = req.body;
+  
+      if (!req.body) {
+        return res
+          .status(500)
+          .json({ error: "Algum campo  não foi informado do corpo da requisição" });
+      }
+  
+      const database = await getDatabase();
+  
+      const busCollection = await database.collection("vagas");
+  
+          busCollection.insertOne({
+        ...req.body,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+      res.status(200).json({ message: "Vaga registrada com sucesso" });
+    } catch (error) {
+      res.status(500).json({ error: "Não foi possivel criar essa empresa, verifique com nosso suporte" });
+    }
+  }
+
+  async function registerAttractions(req, res) {
+    try {
+      const { nomeLocal, tipoLocal, cidade, comoChegar, fotos, nota  } = req.body;
+  
+      if (!req.body) {
+        return res
+          .status(500)
+          .json({ error: "Algum campo  não foi informado do corpo da requisição" });
+      }
+  
+      const database = await getDatabase();
+  
+      const busCollection = await database.collection("attractions");
+  
+    //  const bidExits = await busCollection.findOne({ cnpjCpf });
+  
+    //   if (bidExits)
+    //     return res
+    //       .status(500)
+    //       .json({ error: "Um cpf ou cpnj já existe" });
+  
+          busCollection.insertOne({
+        ...req.body,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+      res.status(200).json({ message: "Empresa da cidade de Registro foi criado com sucesso" });
+    } catch (error) {
+      res.status(500).json({ error: "Não foi possivel criar essa empresa, verifique com nosso suporte" });
+    }
+  }
+
 
 // crash analitycs - sentry.io
 
 module.exports = {
   register,
-  update,
+  registerEmpresasRegistroSP,
+  registerAttractions,
+  registerVagas,
 //   getList(_req, res) {
 //     MongoClient.connect(url, { useUnifiedTopology: true }, function (err, db) {
 //       if (err) throw err;
